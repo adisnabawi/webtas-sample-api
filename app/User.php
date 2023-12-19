@@ -36,4 +36,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function historyLimit()
+    {
+        return $this->hasMany('App\TimeIn')->orderBy('time_in', 'desc')->limit(50);
+    
+    }
 }
