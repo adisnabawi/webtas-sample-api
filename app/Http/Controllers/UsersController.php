@@ -29,7 +29,7 @@ class UsersController extends Controller
             $loginUser->hasCompleted = false;
             if ($latestHistory && $latestHistory->time_out != null) {
                 if (Carbon::parse($latestHistory->time_in)->isToday()) {
-                    $loginUser->hasCompleted = true;
+                    $loginUser->hasCompleted = false;
                 }
                 $latestHistory = null;
             }
@@ -100,7 +100,7 @@ class UsersController extends Controller
                 $timein->latitude_out = $request->latitude;
                 $timein->longitude_out = $request->longitude;
                 $timein->save();
-                $timein->hasCompleted = true;
+                $timein->hasCompleted = false;
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Masa keluar berjaya direkod',
@@ -135,7 +135,7 @@ class UsersController extends Controller
         $user->hasCompleted = false;
         if ($latestHistory && $latestHistory->time_out != null) {
             if (Carbon::parse($latestHistory->time_in)->isToday()) {
-                $user->hasCompleted = true;
+                $user->hasCompleted = false;
             }
         }
         return response()->json([
