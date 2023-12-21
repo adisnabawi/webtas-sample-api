@@ -144,4 +144,42 @@ class UsersController extends Controller
             'data' => $user
         ]);
     }
+
+    public function reportDownload($token)
+    {
+        $user = User::where('token', $token)
+            ->whereNotNull('token')
+            ->first();
+        $history = $user->historyLimit;
+
+        $fileName = 'report_ot.csv';
+
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $columns = array('Masa Masuk', 'Masak Keluar', 'Lokasi Masuk', 'Lokasi Keluar');
+
+        $callback = function () use ($history, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach ($history as $task) {
+                $row['Masa Masuk']  = $task->time_in;
+                $row['Masa Keluar']    = $task->time_out;
+                $row['Lokasi Masuk']    = 'Latitude: ' . $task->latitude_in . ', ' . 'Longitude: ' . $task->longitude_in;
+                $row['Lokasi Keluar']  = 'Latitude: ' . $task->latitude_out . ', ' . 'Longitude: ' . $task->longitude_out;
+
+                fputcsv($file, array($row['Masa Masuk'], $row['Masa Keluar'], $row['Lokasi Masuk'], $row['Lokasi Keluar']));
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
 }
