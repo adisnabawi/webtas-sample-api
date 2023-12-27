@@ -162,7 +162,7 @@ class UsersController extends Controller
             "Expires"             => "0"
         );
 
-        $columns = array('Masa Masuk', 'Masak Keluar', 'Lokasi Masuk', 'Lokasi Keluar');
+        $columns = array('Masa Masuk', 'Masa Keluar', 'Lokasi Masuk', 'Lokasi Keluar');
 
         $callback = function () use ($history, $columns) {
             $file = fopen('php://output', 'w');
