@@ -153,8 +153,7 @@ class UsersController extends Controller
             ->first();
 
         $pdf = PDF::loadView('exportpdf', $user->toArray());
-
-        return $pdf->stream('report_ot.pdf');
+        return response($pdf->stream('report_ot.pdf'), 200, ['Content-Type: application/pdf', 'Content-Disposition: attachment; filename="downloaded.pdf"']);
         // THIS IS THE CSV IMPLEMENTATION
         // $history = $user->historyLimit;
         // $fileName = 'report_ot.csv';
