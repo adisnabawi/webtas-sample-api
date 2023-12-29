@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use PDF;
 
 class UsersController extends Controller
 {
@@ -147,39 +148,43 @@ class UsersController extends Controller
 
     public function reportDownload($token)
     {
-        $user = User::where('token', $token)
+        $user = User::with('historyLimit')->where('token', $token)
             ->whereNotNull('token')
             ->first();
-        $history = $user->historyLimit;
 
-        $fileName = 'report_ot.csv';
+        $pdf = PDF::loadView('exportpdf', $user->toArray());
 
-        $headers = array(
-            "Content-type"        => "text/csv",
-            "Content-Disposition" => "attachment; filename=$fileName",
-            "Pragma"              => "no-cache",
-            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
-            "Expires"             => "0"
-        );
+        return $pdf->stream('report_ot.pdf');
+        // THIS IS THE CSV IMPLEMENTATION
+        // $history = $user->historyLimit;
+        // $fileName = 'report_ot.csv';
 
-        $columns = array('Masa Masuk', 'Masa Keluar', 'Lokasi Masuk', 'Lokasi Keluar');
+        // $headers = array(
+        //     "Content-type"        => "text/csv",
+        //     "Content-Disposition" => "attachment; filename=$fileName",
+        //     "Pragma"              => "no-cache",
+        //     "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+        //     "Expires"             => "0"
+        // );
 
-        $callback = function () use ($history, $columns) {
-            $file = fopen('php://output', 'w');
-            fputcsv($file, $columns);
+        // $columns = array('Masa Masuk', 'Masa Keluar', 'Lokasi Masuk', 'Lokasi Keluar');
 
-            foreach ($history as $task) {
-                $row['Masa Masuk']  = $task->time_in;
-                $row['Masa Keluar']    = $task->time_out;
-                $row['Lokasi Masuk']    = 'Latitude: ' . $task->latitude_in . ', ' . 'Longitude: ' . $task->longitude_in;
-                $row['Lokasi Keluar']  = 'Latitude: ' . $task->latitude_out . ', ' . 'Longitude: ' . $task->longitude_out;
+        // $callback = function () use ($history, $columns) {
+        //     $file = fopen('php://output', 'w');
+        //     fputcsv($file, $columns);
 
-                fputcsv($file, array($row['Masa Masuk'], $row['Masa Keluar'], $row['Lokasi Masuk'], $row['Lokasi Keluar']));
-            }
+        //     foreach ($history as $task) {
+        //         $row['Masa Masuk']  = $task->time_in;
+        //         $row['Masa Keluar']    = $task->time_out;
+        //         $row['Lokasi Masuk']    = 'Latitude: ' . $task->latitude_in . ', ' . 'Longitude: ' . $task->longitude_in;
+        //         $row['Lokasi Keluar']  = 'Latitude: ' . $task->latitude_out . ', ' . 'Longitude: ' . $task->longitude_out;
 
-            fclose($file);
-        };
+        //         fputcsv($file, array($row['Masa Masuk'], $row['Masa Keluar'], $row['Lokasi Masuk'], $row['Lokasi Keluar']));
+        //     }
 
-        return response()->stream($callback, 200, $headers);
+        //     fclose($file);
+        // };
+
+        // return response()->stream($callback, 200, $headers);
     }
 }
