@@ -39,7 +39,7 @@ class User extends Authenticatable
 
     public function historyLimit()
     {
-        return $this->hasMany('App\TimeIn')->orderBy('time_in', 'desc')->limit(50);
+        return $this->hasMany('App\TimeIn')->with('images')->orderBy('time_in', 'desc')->limit(50);
     
     }
 }

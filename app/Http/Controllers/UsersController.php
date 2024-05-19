@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\TimeIn;
+use App\TimeInImage;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use PDF;
 
@@ -100,6 +102,7 @@ class UsersController extends Controller
                 $timein->time_out = now();
                 $timein->latitude_out = $request->latitude;
                 $timein->longitude_out = $request->longitude;
+                $timein->place_out = !empty($request->place) ? $request->place : '';
                 $timein->save();
                 $timein->hasCompleted = false;
                 return response()->json([
@@ -115,6 +118,7 @@ class UsersController extends Controller
                 'latitude_in' => $request->latitude,
                 'longitude_in' => $request->longitude,
                 'date' => now()->format('Y-m-d'),
+                'place_in' => !empty($request->place) ? $request->place : '',
             ]);
             $timein->hasCompleted = false;
             return response()->json([
@@ -185,5 +189,37 @@ class UsersController extends Controller
         // };
 
         // return response()->stream($callback, 200, $headers);
+    }
+
+    public function uploadPicture(Request $request)
+    {
+        try {
+            $validated = $request->validate([
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240',
+                'id' => 'required|exists:time_ins,id',
+                'token' => 'required|exists:users,token'
+            ]);
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $path = $image->storeAs('images', $imageName, 'public');
+                $time_in_image = TimeInImage::firstOrCreate([
+                    'time_in_id' => $request->id,
+                    'name' => $imageName,
+                    'url' => url(Storage::url($path)),
+                ]);
+                
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Upload picture successfull',
+                    'data' => $time_in_image
+                ], 200);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error: ' . $th->getMessage(),
+            ], 500);
+        }
     }
 }

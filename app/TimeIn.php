@@ -17,6 +17,8 @@ class TimeIn extends Model
         'longitude_out',
         'latitude_in',
         'latitude_out',
+        'place_in',
+        'place_out',
     ];
 
 
@@ -35,5 +37,10 @@ class TimeIn extends Model
         $query->when($filters['search'] ?? null, function ($query, $search) {
             $query->where('time_in', 'like', '%' . $search . '%');
         });
+    }
+
+    public function images()
+    {
+        return $this->belongsTo(TimeInImage::class, 'id', 'time_in_id');
     }
 }

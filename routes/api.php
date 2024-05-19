@@ -19,4 +19,5 @@ Route::get('history/{token}', 'UsersController@history');
 Route::post('timein/{token}', 'UsersController@timein');
 Route::get('profile/{token}', 'UsersController@profile');
 Route::get('report/download/{token}', 'UsersController@reportDownload');
+Route::post('upload/image', 'UsersController@uploadPicture');
 Route::get('logout/{token}', 'UsersController@logout');
