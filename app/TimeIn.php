@@ -41,6 +41,6 @@ class TimeIn extends Model
 
     public function images()
     {
-        return $this->belongsTo(TimeInImage::class, 'id', 'time_in_id');
+        return $this->hasMany(TimeInImage::class, 'id', 'time_in_id');
     }
 }
