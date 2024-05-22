@@ -19,6 +19,7 @@ class TimeIn extends Model
         'latitude_out',
         'place_in',
         'place_out',
+        'remark',
     ];
 
 

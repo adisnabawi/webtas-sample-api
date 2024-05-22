@@ -103,6 +103,7 @@ class UsersController extends Controller
                 $timein->latitude_out = $request->latitude;
                 $timein->longitude_out = $request->longitude;
                 $timein->place_out = !empty($request->place) ? $request->place : '';
+                $timein->remark = !empty($request->remark) ? $request->remark : '';
                 $timein->save();
                 $timein->hasCompleted = false;
                 return response()->json([
@@ -119,6 +120,7 @@ class UsersController extends Controller
                 'longitude_in' => $request->longitude,
                 'date' => now()->format('Y-m-d'),
                 'place_in' => !empty($request->place) ? $request->place : '',
+                'remark' => !empty($request->remark) ? $request->remark : '',
             ]);
             $timein->hasCompleted = false;
             return response()->json([
@@ -208,7 +210,7 @@ class UsersController extends Controller
                     'name' => $imageName,
                     'url' => url(Storage::url($path)),
                 ]);
-                
+
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Upload picture successfull',
