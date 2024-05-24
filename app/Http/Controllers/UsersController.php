@@ -103,7 +103,7 @@ class UsersController extends Controller
                 $timein->latitude_out = $request->latitude;
                 $timein->longitude_out = $request->longitude;
                 $timein->place_out = !empty($request->place) ? $request->place : '';
-                $timein->remark = !empty($request->remark) ? $request->remark : '';
+                $timein->remark_out = !empty($request->remark) ? $request->remark : '';
                 $timein->save();
                 $timein->hasCompleted = false;
                 return response()->json([

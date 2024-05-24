@@ -20,6 +20,8 @@ class TimeIn extends Model
         'place_in',
         'place_out',
         'remark',
+        'remark_in',
+        'remark_out',
     ];
 
 
