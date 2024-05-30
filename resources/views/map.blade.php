@@ -30,7 +30,7 @@
 <body>
 
     <iframe
-        src="{{ 'https://www.google.com/maps/embed/v1/place?key=' . env('GOOGLE_API_KEY') . '&q=' . $location . '&zoom=15' }}"
+        src="{{ 'https://www.google.com/maps/embed/v1/place?key=' . env('GOOGLE_API_KEY') . '&q=' . $location . '&zoom=18' }}"
         style="border:0;" loading="lazy">
     </iframe>
 
