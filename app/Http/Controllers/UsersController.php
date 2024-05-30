@@ -8,7 +8,9 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use PDF;
 
@@ -223,5 +225,44 @@ class UsersController extends Controller
                 'message' => 'Error: ' . $th->getMessage(),
             ], 500);
         }
+    }
+
+    public function maps(Request $request)
+    {
+        $rules = [
+            'location' => 'required',
+            'token' => 'required|exists:users,token'
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+        $location = $request->location;
+        return view('map', compact('location'));
+    }
+
+    public function places(Request $request)
+    {
+        $rules = [
+            'location' => 'required',
+            'token' => 'required|exists:users,token'
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $location = $request->location;
+
+        $response = Http::get("https://maps.googleapis.com/maps/api/geocode/json?latlng=$location&sensor=true&key=" . env('GOOGLE_API_KEY'));
+        return $response->json();
     }
 }
