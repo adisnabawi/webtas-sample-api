@@ -101,6 +101,16 @@ class UsersController extends Controller
                 ->whereNull('time_out')
                 ->first();
             if ($timein) {
+                if ($request->hasFile('image')) {
+                    $image = $request->file('image');
+                    $imageName = time() . '.' . $image->getClientOriginalExtension();
+                    $path = $image->storeAs('images', $imageName, 'public');
+                    $time_in_image = TimeInImage::firstOrCreate([
+                        'time_in_id' => $timein->id,
+                        'name' => $imageName,
+                        'url' => url(Storage::url($path)),
+                    ]);
+                }
                 $timein->time_out = now();
                 $timein->latitude_out = $request->latitude;
                 $timein->longitude_out = $request->longitude;
@@ -124,6 +134,20 @@ class UsersController extends Controller
                 'place_in' => !empty($request->place) ? $request->place : '',
                 'remark' => !empty($request->remark) ? $request->remark : '',
             ]);
+            try {
+                if ($request->hasFile('image')) {
+                    $image = $request->file('image');
+                    $imageName = time() . '.' . $image->getClientOriginalExtension();
+                    $path = $image->storeAs('images', $imageName, 'public');
+                    $time_in_image = TimeInImage::firstOrCreate([
+                        'time_in_id' => $timein->id,
+                        'name' => $imageName,
+                        'url' => url(Storage::url($path)),
+                    ]);
+                }
+            } catch (\Throwable $th) {
+                \Log::error('Time In Upload Image ERROR' . $th->getMessage());
+            }
             $timein->hasCompleted = false;
             return response()->json([
                 'status' => 'success',
