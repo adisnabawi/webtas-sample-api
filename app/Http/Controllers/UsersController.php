@@ -85,8 +85,10 @@ class UsersController extends Controller
             ->orderBy('time_in', 'desc');
 
         if ($request->has('q') && !empty($request->q)) {
-            $history->where('place_in', 'like', '%' . $request->q . '%')
-                ->orWhere('place_out', 'like', '%' . $request->q . '%');
+            $history->where(function ($query) use ($request) {
+                $query->where('place_in', 'like', '%' . $request->q . '%')
+                    ->orWhere('place_out', 'like', '%' . $request->q . '%');
+            });
         }
 
         if ($request->has('month') && $request->has('year') && !empty($request->month) && !empty($request->year)) {
