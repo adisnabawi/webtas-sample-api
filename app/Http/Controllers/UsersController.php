@@ -76,12 +76,26 @@ class UsersController extends Controller
         }
     }
 
-    public function history($token)
+    public function history($token, Request $request)
     {
         $user = User::where('token', $token)
             ->whereNotNull('token')
             ->first();
-        $history = $user->historyLimit;
+        $history = TimeIn::with('images')->where('user_id', $user->id)
+            ->orderBy('time_in', 'desc');
+
+        if ($request->has('q') && !empty($request->q)) {
+            $history->where('place_in', 'like', '%' . $request->q . '%')
+                ->orWhere('place_out', 'like', '%' . $request->q . '%');
+        }
+
+        if ($request->has('month') && $request->has('year') && !empty($request->month) && !empty($request->year)) {
+            // Get start and end date of the month using month and year
+            $start = Carbon::createFromDate($request->year, $this->getMonth($request->month), 1)->startOfMonth();
+            $end = Carbon::createFromDate($request->year, $this->getMonth($request->month), 1)->endOfMonth();
+            $history->whereBetween('date', [$start, $end]);
+        }
+        $history = $history->limit(50)->get();
 
         return response()->json([
             'status' => 'success',
@@ -288,5 +302,47 @@ class UsersController extends Controller
 
         $response = Http::get("https://maps.googleapis.com/maps/api/geocode/json?latlng=$location&sensor=true&key=" . env('GOOGLE_API_KEY'));
         return $response->json();
+    }
+
+    public function getMonth($month)
+    {
+        switch ($month) {
+            case 'Januari':
+                return '01';
+                break;
+            case 'Februari':
+                return '02';
+                break;
+            case 'Mac':
+                return '03';
+                break;
+            case 'April':
+                return '04';
+                break;
+            case 'Mei':
+                return '05';
+                break;
+            case 'Jun':
+                return '06';
+                break;
+            case 'Julai':
+                return '07';
+                break;
+            case 'Ogos':
+                return '08';
+                break;
+            case 'September':
+                return  '09';
+                break;
+            case 'Oktober':
+                return '10';
+                break;
+            case 'November':
+                return '11';
+                break;
+            case 'Disember':
+                return '12';
+                break;
+        }
     }
 }
