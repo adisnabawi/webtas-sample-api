@@ -109,7 +109,7 @@ class UsersController extends Controller
         //     return $item;
         // });
         $history = $history->map(function ($item) {
-            $item->date = Carbon::parse($item->date)->format('d-m-Y');
+            $item->date = Carbon::parse($item->date)->format('d/m/Y');
             return $item;
         });
 
