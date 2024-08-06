@@ -108,6 +108,10 @@ class UsersController extends Controller
         //     $item->date = Carbon::parse($item->date)->addHours($addHours);
         //     return $item;
         // });
+        $history = $history->map(function ($item) {
+            $item->date = Carbon::parse($item->date)->format('d-m-Y');
+            return $item;
+        });
 
         return response()->json([
             'status' => 'success',
