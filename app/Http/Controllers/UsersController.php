@@ -99,6 +99,16 @@ class UsersController extends Controller
         }
         $history = $history->limit(50)->get();
 
+        $addHours = 8;
+        $history = $history->map(function ($item) use ($addHours) {
+            $item->created_at = Carbon::parse($item->created_at)->addHours($addHours);
+            $item->updated_at = Carbon::parse($item->updated_at)->addHours($addHours);
+            $item->time_in = Carbon::parse($item->time_in)->addHours($addHours);
+            $item->time_out = $item->time_out ? Carbon::parse($item->time_out)->addHours($addHours) : null;
+            $item->date = Carbon::parse($item->date)->addHours($addHours);
+            return $item;
+        });
+
         return response()->json([
             'status' => 'success',
             'message' => 'History retrieved successfully',
