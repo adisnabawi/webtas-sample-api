@@ -112,12 +112,11 @@ class UsersController extends Controller
             $item->date = Carbon::parse($item->date)->format('d/m/Y');
             return $item;
         });
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'History retrieved successfully',
-            'data' => $history
-        ]);
+        $array['data'] = $history;
+        $array['status'] = 'success';
+        $array['message'] = 'History retrieved successfully';
+        $json = json_encode($array);
+        return $json;
     }
 
     public function timein(Request $request, $token)
