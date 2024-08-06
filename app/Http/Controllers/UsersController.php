@@ -116,7 +116,7 @@ class UsersController extends Controller
         $array['status'] = 'success';
         $array['message'] = 'History retrieved successfully';
         $json = json_encode($array);
-        return $json;
+        return response($json, 200, ['Content-Type' => 'application/json']);
     }
 
     public function timein(Request $request, $token)
