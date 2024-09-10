@@ -78,11 +78,12 @@ class UsersController extends Controller
 
     public function history($token, Request $request)
     {
-        $user = User::where('token', $token)
-            ->whereNotNull('token')
-            ->first();
-        $history = TimeIn::with('images')->where('user_id', $user->id)
-            ->orderBy('time_in', 'desc');
+        $user = $request->user;
+        $history = TimeIn::with('images')->where('user_id', $user->id);
+
+        if ($request->has('type') && !empty($request->type)) {
+            $history->where('type', $request->type);
+        }
 
         if ($request->has('q') && !empty($request->q)) {
             $history->where(function ($query) use ($request) {
@@ -92,12 +93,12 @@ class UsersController extends Controller
         }
 
         if ($request->has('month') && $request->has('year') && !empty($request->month) && !empty($request->year)) {
-            // Get start and end date of the month using month and year
             $start = Carbon::createFromDate($request->year, $this->getMonth($request->month), 1)->startOfMonth();
             $end = Carbon::createFromDate($request->year, $this->getMonth($request->month), 1)->endOfMonth();
             $history->whereBetween('date', [$start, $end]);
         }
-        $history = $history->limit(50)->get();
+
+        $history = $history->orderBy('time_in', 'desc')->limit(50)->get();
 
         $history = $history->map(function ($item) {
             $item->date = Carbon::parse($item->date)->format('d/m/Y');
@@ -112,12 +113,11 @@ class UsersController extends Controller
 
     public function timein(Request $request, $token)
     {
-        $user = User::where('token', $token)
-            ->whereNotNull('token')
-            ->first();
+        $user = $request->user;
         if ($user) {
             $timein = TimeIn::where('user_id', $user->id)
                 ->whereDate('time_in', date('Y-m-d'))
+                ->where('type', $request->type ?? config('staticdata.history.type.overtime'))
                 ->whereNull('time_out')
                 ->first();
             if ($timein) {
@@ -136,6 +136,7 @@ class UsersController extends Controller
                 $timein->longitude_out = $request->longitude;
                 $timein->place_out = !empty($request->place) ? $request->place : '';
                 $timein->remark_out = !empty($request->remark) ? $request->remark : '';
+                $timein->type = $request->type ?? config('staticdata.history.type.overtime');
                 $timein->save();
                 $timein->hasCompleted = false;
                 return response()->json([
@@ -151,6 +152,7 @@ class UsersController extends Controller
                 'latitude_in' => $request->latitude,
                 'longitude_in' => $request->longitude,
                 'date' => now()->format('Y-m-d'),
+                'type' => $request->type ?? config('staticdata.history.type.overtime'),
                 'place_in' => !empty($request->place) ? $request->place : '',
                 'remark' => !empty($request->remark) ? $request->remark : '',
             ]);
@@ -177,11 +179,9 @@ class UsersController extends Controller
         }
     }
 
-    public function profile($token)
+    public function profile($token, Request $request)
     {
-        $user = User::where('token', $token)
-            ->whereNotNull('token')
-            ->first();
+        $user = $request->user;
         $latestHistory = TimeIn::where('user_id', $user->id)
             ->orderBy('time_in', 'desc')
             ->first();
@@ -198,7 +198,7 @@ class UsersController extends Controller
         ]);
     }
 
-    public function reportDownload($token)
+    public function reportDownload($token, Request $request)
     {
         $user = User::with('historyLimit')->where('token', $token)
             ->whereNotNull('token')

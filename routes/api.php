@@ -15,10 +15,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('login', 'UsersController@login');
-Route::get('history/{token}', 'UsersController@history');
-Route::post('timein/{token}', 'UsersController@timein');
-Route::get('profile/{token}', 'UsersController@profile');
-Route::get('report/download/{token}', 'UsersController@reportDownload');
-Route::post('upload/image', 'UsersController@uploadPicture');
-Route::get('places', 'UsersController@places');
-Route::get('logout/{token}', 'UsersController@logout');
+
+Route::middleware('verify.token')->group(function () {
+    Route::get('history/{token}', 'UsersController@history')->name('history');
+    Route::post('timein/{token}', 'UsersController@timein')->name('timein');
+    Route::get('profile/{token}', 'UsersController@profile')->name('profile');
+    Route::get('report/download/{token}', 'UsersController@reportDownload')->name('report.download');
+    Route::post('upload/image', 'UsersController@uploadPicture')->name('upload.image');
+    Route::get('places', 'UsersController@places')->name('places');
+    Route::get('logout/{token}', 'UsersController@logout')->name('logout');
+});

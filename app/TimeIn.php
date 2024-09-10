@@ -22,14 +22,8 @@ class TimeIn extends Model
         'remark',
         'remark_in',
         'remark_out',
+        'type',
     ];
-
-    // protected $dates = [
-    //     'time_in',
-    //     'time_out',
-    //     'date',
-    // ];
-
 
     public function getTimeInFormattedAttribute()
     {
