@@ -111,11 +111,11 @@ class ReportController extends Controller
             ], 400);
         }
         $sampleData = [
-            'time_in' => '8:00 AM',
-            'time_out' => '5:00 PM',
-            'status' => 'Hadir',
+            'time_in_setting' => '8:00 AM',
+            'time_out_setting' => '5:00 PM',
+            'today_status' => 'Hadir',
             'distance' => '500', // meters
-            'previous' => [
+            'previous_history' => [
                 'date' => '2024-09-15',
                 'time_in' => '9:00 AM',
                 'time_out' => '6:00 PM',
