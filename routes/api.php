@@ -24,4 +24,5 @@ Route::middleware('verify.token')->group(function () {
     Route::post('upload/image', 'UsersController@uploadPicture')->name('upload.image');
     Route::get('places', 'UsersController@places')->name('places');
     Route::get('logout/{token}', 'UsersController@logout')->name('logout');
+    Route::get('report/{token}', 'ReportController@index')->name('report');
 });
