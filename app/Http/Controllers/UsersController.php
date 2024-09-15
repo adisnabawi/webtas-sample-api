@@ -98,7 +98,11 @@ class UsersController extends Controller
             $history->whereBetween('date', [$start, $end]);
         }
 
-        $history = $history->orderBy('time_in', 'desc')->limit(50)->get();
+        if (!empty($request->limit)) {
+            $history = $history->orderBy('time_in', 'desc')->limit($request->limit)->get();
+        } else {
+            $history = $history->orderBy('time_in', 'desc')->limit(50)->get();
+        }
 
         $history = $history->map(function ($item) {
             $item->date = Carbon::parse($item->date)->format('d/m/Y');
