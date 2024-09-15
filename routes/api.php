@@ -25,4 +25,5 @@ Route::middleware('verify.token')->group(function () {
     Route::get('places', 'UsersController@places')->name('places');
     Route::get('logout/{token}', 'UsersController@logout')->name('logout');
     Route::get('report/{token}', 'ReportController@index')->name('report');
+    Route::get('kedatangan/{token}', 'ReportController@attendance')->name('attendance');
 });

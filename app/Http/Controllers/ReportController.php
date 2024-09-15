@@ -102,4 +102,27 @@ class ReportController extends Controller
 
         return response()->json($sampleData, 200);
     }
+
+    public function attendance(Request $request)
+    {
+        if (empty($request->staff_id)) {
+            return response()->json([
+                'message' => 'Staff ID is required',
+            ], 400);
+        }
+        $sampleData = [
+            'time_in' => '8:00 AM',
+            'time_out' => '5:00 PM',
+            'status' => 'Hadir',
+            'distance' => '500', // meters
+            'previous' => [
+                'date' => '2024-09-15',
+                'time_in' => '9:00 AM',
+                'time_out' => '6:00 PM',
+                'status' => 'Lambat',
+            ],
+        ];
+
+        return response()->json($sampleData, 200);
+    }
 }
