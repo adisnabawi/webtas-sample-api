@@ -105,11 +105,12 @@ class ReportController extends Controller
 
     public function attendance(Request $request)
     {
-        if (empty($request->staff_id)) {
-            return response()->json([
-                'message' => 'Staff ID is required',
-            ], 400);
-        }
+        // Disable this for testing
+        // if (empty($request->staff_id)) {
+        //     return response()->json([
+        //         'message' => 'Staff ID is required',
+        //     ], 400);
+        // }
         $sampleData = [
             'time_in_setting' => '8:00 AM',
             'time_out_setting' => '5:00 PM',
