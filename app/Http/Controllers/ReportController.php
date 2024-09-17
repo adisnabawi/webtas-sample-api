@@ -115,6 +115,10 @@ class ReportController extends Controller
             'time_in_setting' => '8:00 AM',
             'time_out_setting' => '5:00 PM',
             'today_status' => 'Hadir',
+            'location' => [
+                'latitude' => '3.2407552',
+                'longitude' => '101.7184256',
+            ],
             'distance' => '500', // meters
             'previous_history' => [
                 'date' => '2024-09-15',
