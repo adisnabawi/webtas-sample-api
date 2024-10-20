@@ -111,6 +111,28 @@ class ReportController extends Controller
         //         'message' => 'Staff ID is required',
         //     ], 400);
         // }
+        if ($request->type == config('staticdata.history.type.attendance')) {
+            $sampleData = [
+                'time_in_setting' => '9:00 AM',
+                'time_out_setting' => '5:10 PM',
+                'today_status' => 'Hadir',
+                'location' => [
+                    'latitude' => '3.2407552',
+                    'longitude' => '101.7184256',
+                ],
+                'distance' => '500', // meters
+                'previous_history' => [
+                    'date' => '2024-09-15',
+                    'time_in' => '8:40 AM',
+                    'time_out' => '5:35 PM',
+                    'status' => 'Awal',
+                ],
+            ];
+
+            return response()->json($sampleData, 200);
+        }
+
+
         $sampleData = [
             'time_in_setting' => '8:00 AM',
             'time_out_setting' => '5:00 PM',
