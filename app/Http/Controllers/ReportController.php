@@ -114,7 +114,7 @@ class ReportController extends Controller
         if ($request->type == config('staticdata.history.type.attendance')) {
             $sampleData = [
                 'time_in_setting' => '9:00 AM',
-                'time_out_setting' => '5:10 PM',
+                'time_out_setting' => '11:10 PM',
                 'today_status' => 'Hadir',
                 'location' => [
                     'latitude' => '3.2407552',
