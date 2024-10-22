@@ -113,10 +113,15 @@ class ReportController extends Controller
         //         'message' => 'Staff ID is required',
         //     ], 400);
         // }
+        $type = config('staticdata.history.type.attendance');
+        if (!empty($request->type)) {
+            $type = $request->type;
+        }
         $user = $request->user;
         $history = TimeIn::where('user_id', $user->id)
-            ->where('type', $request->type)
-            ->orderBy('time_in', 'desc')->first();
+            ->where('type', $type)
+            ->orderBy('time_in', 'desc')
+            ->first();
         if ($request->type == config('staticdata.history.type.attendance')) {
             $sampleData = [
                 'time_in_setting' => '9:00 AM',
