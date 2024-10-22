@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\TimeIn;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -111,6 +113,10 @@ class ReportController extends Controller
         //         'message' => 'Staff ID is required',
         //     ], 400);
         // }
+        $user = $request->user;
+        $history = TimeIn::where('user_id', $user->id)
+            ->where('type', $request->type)
+            ->orderBy('time_in', 'desc')->first();
         if ($request->type == config('staticdata.history.type.attendance')) {
             $sampleData = [
                 'time_in_setting' => '9:00 AM',
@@ -122,9 +128,12 @@ class ReportController extends Controller
                 ],
                 'distance' => '500', // meters
                 'previous_history' => [
-                    'date' => '2024-09-15',
-                    'time_in' => '8:40 AM',
-                    'time_out' => '5:35 PM',
+                    // 'date' => '2024-09-15', 
+                    'date' => Carbon::parse($history->time_in)->format('Y-m-d'),
+                    // 'time_in' => '8:40 AM',
+                    'time_in' => Carbon::parse($history->time_in)->format('g:i A'),
+                    // 'time_out' => '5:35 PM',
+                    'time_out' => $history->time_out ? Carbon::parse($history->time_out)->format('g:i A') : null,
                     'status' => 'Awal',
                 ],
             ];
@@ -143,9 +152,13 @@ class ReportController extends Controller
             ],
             'distance' => '500', // meters
             'previous_history' => [
-                'date' => '2024-09-15',
-                'time_in' => '9:00 AM',
-                'time_out' => '6:00 PM',
+                // 'date' => '2024-09-15',
+                // 'time_in' => '9:00 AM',
+                // 'time_out' => '6:00 PM',
+                // 'status' => 'Lambat',
+                'date' => Carbon::parse($history->time_in)->format('Y-m-d'),
+                'time_in' => Carbon::parse($history->time_in)->format('g:i A'),
+                'time_out' => $history->time_out ? Carbon::parse($history->time_out)->format('g:i A') : null,
                 'status' => 'Lambat',
             ],
         ];
