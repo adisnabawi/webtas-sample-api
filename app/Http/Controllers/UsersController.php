@@ -355,4 +355,10 @@ class UsersController extends Controller
                 break;
         }
     }
+
+    public function webview($token)
+    {
+        $user = User::where('token', $token)->first();
+        return view('webview', compact('user'));
+    }
 }

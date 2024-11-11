@@ -19,3 +19,4 @@ Route::get('/', function () {
 });
 
 Route::get('/maps', [UsersController::class, 'maps']);
+Route::get('/webview/kedatangan/{token}', [UsersController::class, 'webview']);
