@@ -169,6 +169,11 @@ class ReportController extends Controller
                         'longitude' => '101.7284256',
                         'distance' => '0.2', // 200 meters
                     ],
+                    [
+                        'latitude' => '37.4219983',
+                        'longitude' => '-122.084',
+                        'distance' => '0.1', // 100 meters
+                    ]
                 ],
                 'previous_history' => [
                     // 'date' => '2024-09-15', 
