@@ -162,13 +162,14 @@ class ReportController extends Controller
                     [
                         'latitude' => '3.2407552',
                         'longitude' => '101.7184256',
+                        'distance' => '0.1', // 100 meters
                     ],
                     [
                         'latitude' => '3.2507552',
                         'longitude' => '101.7284256',
+                        'distance' => '0.2', // 200 meters
                     ],
                 ],
-                'distance' => '0.2', // 200 meters
                 'previous_history' => [
                     // 'date' => '2024-09-15', 
                     'date' => Carbon::parse($history->time_in)->format('Y-m-d'),
@@ -192,13 +193,14 @@ class ReportController extends Controller
                 [
                     'latitude' => '3.2407552',
                     'longitude' => '101.7184256',
+                    'distance' => '0.1', // 100 meters
                 ],
                 [
                     'latitude' => '3.2507552',
                     'longitude' => '101.7284256',
+                    'distance' => '0.2', // 200 meters
                 ],
             ],
-            'distance' => '0.1', // 100 meters
             'previous_history' => [
                 // 'date' => '2024-09-15',
                 // 'time_in' => '9:00 AM',
