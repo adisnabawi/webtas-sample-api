@@ -159,10 +159,16 @@ class ReportController extends Controller
                 'time_out_setting' => '11:10 PM',
                 'today_status' => 'Hadir',
                 'location' => [
-                    'latitude' => '3.2407552',
-                    'longitude' => '101.7184256',
+                    [
+                        'latitude' => '3.2407552',
+                        'longitude' => '101.7184256',
+                    ],
+                    [
+                        'latitude' => '3.2507552',
+                        'longitude' => '101.7284256',
+                    ],
                 ],
-                'distance' => '500', // meters
+                'distance' => '0.2', // 200 meters
                 'previous_history' => [
                     // 'date' => '2024-09-15', 
                     'date' => Carbon::parse($history->time_in)->format('Y-m-d'),
