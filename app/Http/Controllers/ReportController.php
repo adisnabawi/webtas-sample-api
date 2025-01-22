@@ -182,9 +182,9 @@ class ReportController extends Controller
                 ],
                 'previous_history' => [
                     // 'date' => '2024-09-15', 
-                    'date' => Carbon::parse($history->time_in)->format('Y-m-d'),
+                    'date' => $history->time_in ? Carbon::parse($history->time_in)->format('Y-m-d') : null,
                     // 'time_in' => '8:40 AM',
-                    'time_in' => Carbon::parse($history->time_in)->format('g:i A'),
+                    'time_in' => $history->time_in ? Carbon::parse($history->time_in)->format('g:i A') : null,
                     // 'time_out' => '5:35 PM',
                     'time_out' => $history->time_out ? Carbon::parse($history->time_out)->format('g:i A') : null,
                     'status' => 'Awal',
