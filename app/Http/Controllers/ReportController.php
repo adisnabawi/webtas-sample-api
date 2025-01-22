@@ -181,12 +181,9 @@ class ReportController extends Controller
                     ]
                 ],
                 'previous_history' => [
-                    // 'date' => '2024-09-15', 
-                    'date' => $history->time_in ? Carbon::parse($history->time_in)->format('Y-m-d') : null,
-                    // 'time_in' => '8:40 AM',
-                    'time_in' => $history->time_in ? Carbon::parse($history->time_in)->format('g:i A') : null,
-                    // 'time_out' => '5:35 PM',
-                    'time_out' => $history->time_out ? Carbon::parse($history->time_out)->format('g:i A') : null,
+                    'date' => $history ? Carbon::parse($history->time_in)->format('Y-m-d') : null,
+                    'time_in' => $history ? Carbon::parse($history->time_in)->format('g:i A') : null,
+                    'time_out' => $history ? Carbon::parse($history->time_out)->format('g:i A') : null,
                     'status' => 'Awal',
                 ],
             ];
@@ -212,12 +209,8 @@ class ReportController extends Controller
                 ],
             ],
             'previous_history' => [
-                // 'date' => '2024-09-15',
-                // 'time_in' => '9:00 AM',
-                // 'time_out' => '6:00 PM',
-                // 'status' => 'Lambat',
-                'date' => Carbon::parse($history->time_in)->format('Y-m-d'),
-                'time_in' => Carbon::parse($history->time_in)->format('g:i A'),
+                'date' => $history ? Carbon::parse($history->time_in)->format('Y-m-d') : null,
+                'time_in' => $history ? Carbon::parse($history->time_in)->format('g:i A') : null,
                 'time_out' => $history->time_out ? Carbon::parse($history->time_out)->format('g:i A') : null,
                 'status' => 'Lambat',
             ],
