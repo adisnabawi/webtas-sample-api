@@ -159,7 +159,6 @@ class ReportController extends Controller
                 'time_out_setting' => '11:10 PM',
                 'today_status' => 'Hadir',
                 'location' => [
-                    /*
                     [
                         'latitude' => '3.2407552',
                         'longitude' => '101.7184256',
@@ -175,7 +174,6 @@ class ReportController extends Controller
                         'longitude' => '101.7284256',
                         'distance' => '0.2', // 200 meters
                     ],
-                    */
                     [
                         'latitude' => '37.4219983',
                         'longitude' => '-122.084',
