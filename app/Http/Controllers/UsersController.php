@@ -78,6 +78,7 @@ class UsersController extends Controller
 
     public function history($token, Request $request)
     {
+        \Log::info('History Request', $request->all());
         $user = $request->user;
         $history = TimeIn::with('images')->where('user_id', $user->id);
 
@@ -95,7 +96,8 @@ class UsersController extends Controller
         if ($request->has('month') && $request->has('year') && !empty($request->month) && !empty($request->year)) {
             $start = Carbon::createFromDate($request->year, $this->getMonth($request->month), 1)->startOfMonth();
             $end = Carbon::createFromDate($request->year, $this->getMonth($request->month), 1)->endOfMonth();
-            $history->whereBetween('date', [$start, $end]);
+           $history->where('date', '>=', $start->format('Y-m-d'));
+           // $history->whereBetween('date', [$start, $end]);
         }
 
         if (!empty($request->limit)) {
@@ -112,6 +114,7 @@ class UsersController extends Controller
         $array['status'] = 'success';
         $array['message'] = 'History retrieved successfully';
         $json = json_encode($array);
+        \Log::info('History Data', $array);
         return response($json, 200, ['Content-Type' => 'application/json']);
     }
 
