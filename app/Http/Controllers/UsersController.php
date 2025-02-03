@@ -96,7 +96,7 @@ class UsersController extends Controller
         if ($request->has('month') && $request->has('year') && !empty($request->month) && !empty($request->year)) {
             $start = Carbon::createFromDate($request->year, $this->getMonth($request->month), 1)->startOfMonth();
             $end = Carbon::createFromDate($request->year, $this->getMonth($request->month), 1)->endOfMonth();
-           $history->where('date', '>=', $start->format('Y-m-d'));
+           $history->where('date', '>=', $start->format('Y-m-d'))->where('date', '<=', $end->format('Y-m-d'));
            // $history->whereBetween('date', [$start, $end]);
         }
 
